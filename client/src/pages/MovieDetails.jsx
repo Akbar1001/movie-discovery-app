@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 
 import { getMovieDetails } from "../api/movies";
+import useWishlist from "../hooks/useWishlist";
 
 const MovieDetails = () => {
     const { id } = useParams();
@@ -17,6 +18,14 @@ const MovieDetails = () => {
         queryFn: () => getMovieDetails(id),
         enabled: Boolean(id),
     });
+
+    const {
+        isInWishlist,
+        addToWishlist,
+        removeFromWishlist,
+        isAdding,
+        isRemoving,
+    } = useWishlist();
 
     if (isLoading) {
         return (
@@ -37,7 +46,9 @@ const MovieDetails = () => {
                         error.message}
                 </p>
 
-                <Link to="/">Back to movies</Link>
+                <Link to="/">
+                    Back to movies
+                </Link>
             </main>
         );
     }
@@ -48,10 +59,31 @@ const MovieDetails = () => {
         return (
             <main>
                 <h1>Movie Not Found</h1>
-                <Link to="/">Back to movies</Link>
+
+                <Link to="/">
+                    Back to movies
+                </Link>
             </main>
         );
     }
+
+    const movieInWishlist = isInWishlist(movie.id);
+
+    const handleWishlistClick = () => {
+        if (movieInWishlist) {
+            removeFromWishlist(movie.id);
+        } else {
+            addToWishlist(movie);
+        }
+    };
+
+    const wishlistButtonText = isAdding
+        ? "Adding..."
+        : isRemoving
+        ? "Removing..."
+        : movieInWishlist
+        ? "Remove from Wishlist"
+        : "Add to Wishlist";
 
     return (
         <main>
@@ -128,10 +160,23 @@ const MovieDetails = () => {
                             </div>
                         )}
 
+                        <button
+                            type="button"
+                            className="wishlist-button"
+                            onClick={handleWishlistClick}
+                            disabled={
+                                isAdding || isRemoving
+                            }
+                        >
+                            {wishlistButtonText}
+                        </button>
+
                         <div className="movie-description">
                             <h2>Overview</h2>
 
-                            <p>{movie.overview}</p>
+                            <p>
+                                {movie.overview}
+                            </p>
                         </div>
 
                         <div className="movie-extra-info">

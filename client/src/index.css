@@ -346,3 +346,24 @@ h1 {
     color: #fff;
 }
 
+
+.wishlist-button {
+    margin-bottom: 30px;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 6px;
+    background: #fff;
+    color: #111;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.wishlist-button:hover:not(:disabled) {
+    background: #ddd;
+}
+
+.wishlist-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
