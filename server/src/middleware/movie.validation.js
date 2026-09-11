@@ -3,10 +3,11 @@ const { z } = require("zod");
 const getMoviesSchema = z.object({
     query: z.object({
         page: z.coerce
-            .number()
-            .int()
-            .min(1)
-            .default(1),
+        .number()
+        .int()
+        .min(1)
+        .max(500)
+        .default(1),
 
         search: z
             .string()

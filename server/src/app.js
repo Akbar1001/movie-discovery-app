@@ -3,19 +3,25 @@ const cors = require("cors");
 const helmet = require("helmet");
 
 const movieRoutes = require("./routes/movie.routes");
-
 const wishlistRoutes = require("./routes/wishlist.routes");
 
 const errorHandler = require("./middleware/errorHandler");
-
 const apiLimiter = require("./middleware/rateLimiter");
 
 const app = express();
 
-app.use(helmet());
-app.use(cors());
-app.use(express.json());
+const allowedOrigin =
+    process.env.CLIENT_URL || "http://localhost:5173";
 
+app.use(helmet());
+
+app.use(
+    cors({
+        origin: allowedOrigin,
+    })
+);
+
+app.use(express.json());
 
 app.get("/api/health", (req, res) => {
     res.json({
@@ -24,9 +30,9 @@ app.get("/api/health", (req, res) => {
     });
 });
 
-app.use("/api/movies", movieRoutes);
-app.use("/api/wishlist", wishlistRoutes);
+app.use("/api", apiLimiter);
 
+app.use("/api/movies", movieRoutes);
 app.use("/api/wishlist", wishlistRoutes);
 
 app.use(errorHandler);
