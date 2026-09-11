@@ -1,9 +1,10 @@
-import { Routes, Route, Navigate } from "react-router-dom";
 
-import Search from "./pages/Search";
+import { Routes, Route, Navigate } from "react-router-dom";
 
 import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
+import Search from "./pages/Search";
+import MovieDetails from "./pages/MovieDetails";
 
 function App() {
     return (
@@ -12,10 +13,22 @@ function App() {
 
             <Routes>
                 <Route path="/" element={<Home />} />
-                <Route path="/search" element={<Search />} />
+
+                <Route
+                    path="/search"
+                    element={<Search />}
+                />
+
+                <Route
+                    path="/movies/:id"
+                    element={<MovieDetails />}
+                />
+
                 <Route
                     path="*"
-                    element={<Navigate to="/" replace />}
+                    element={
+                        <Navigate to="/" replace />
+                    }
                 />
             </Routes>
         </>
@@ -23,3 +36,4 @@ function App() {
 }
 
 export default App;
+
