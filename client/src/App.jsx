@@ -5,6 +5,7 @@ import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
 import Search from "./pages/Search";
 import MovieDetails from "./pages/MovieDetails";
+import Wishlist from "./pages/Wishlist";
 
 function App() {
     return (
@@ -12,7 +13,10 @@ function App() {
             <Navbar />
 
             <Routes>
-                <Route path="/" element={<Home />} />
+                <Route
+                    path="/"
+                    element={<Home />}
+                />
 
                 <Route
                     path="/search"
@@ -25,9 +29,17 @@ function App() {
                 />
 
                 <Route
+                    path="/wishlist"
+                    element={<Wishlist />}
+                />
+
+                <Route
                     path="*"
                     element={
-                        <Navigate to="/" replace />
+                        <Navigate
+                            to="/"
+                            replace
+                        />
                     }
                 />
             </Routes>
