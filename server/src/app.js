@@ -3,6 +3,9 @@ const cors = require("cors");
 const helmet = require("helmet");
 
 const movieRoutes = require("./routes/movie.routes");
+
+const wishlistRoutes = require("./routes/wishlist.routes");
+
 const errorHandler = require("./middleware/errorHandler");
 
 const app = express();
@@ -20,6 +23,9 @@ app.get("/api/health", (req, res) => {
 });
 
 app.use("/api/movies", movieRoutes);
+app.use("/api/wishlist", wishlistRoutes);
+
+
 
 app.use(errorHandler);
 
