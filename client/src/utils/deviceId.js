@@ -17,4 +17,3 @@ const getDeviceId = () => {
 };
 
 export default getDeviceId;
-
