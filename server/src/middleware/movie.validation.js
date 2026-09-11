@@ -49,6 +49,16 @@ const getMoviesSchema = z.object({
     }),
 });
 
+const movieIdSchema = z.object({
+    params: z.object({
+        id: z.coerce
+            .number()
+            .int()
+            .positive(),
+    }),
+});
+
 module.exports = {
     getMoviesSchema,
+    movieIdSchema,
 };

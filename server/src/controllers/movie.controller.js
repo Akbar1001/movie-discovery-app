@@ -27,7 +27,23 @@ const getGenres = async (req, res, next) => {
     }
 };
 
+const getMovieDetails = async (req, res, next) => {
+    try {
+        const { id } = req.validated.params;
+
+        const movie = await movieService.getMovieDetails(id);
+
+        res.json({
+            success: true,
+            data: movie,
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
 module.exports = {
     getMovies,
     getGenres,
+    getMovieDetails,
 };

@@ -96,7 +96,50 @@ const getGenres = async () => {
     return data.genres;
 };
 
+
+const getMovieDetails = async (movieId) => {
+    const cacheKey = `movie-details:${movieId}`;
+
+    const cachedMovie = cache.get(cacheKey);
+
+    if (cachedMovie) {
+        console.log("Cache hit:", cacheKey);
+        return cachedMovie;
+    }
+
+    console.log("Cache miss:", cacheKey);
+
+    const data = await tmdbRequest(`/movie/${movieId}`, {
+        language: "en-US",
+    });
+
+    const movie = {
+        id: data.id,
+        title: data.title || data.original_title || "Untitled",
+        overview: data.overview || "No description available.",
+        posterUrl: data.poster_path
+            ? `https://image.tmdb.org/t/p/w500${data.poster_path}`
+            : null,
+        backdropUrl: data.backdrop_path
+            ? `https://image.tmdb.org/t/p/w1280${data.backdrop_path}`
+            : null,
+        rating: data.vote_average || 0,
+        voteCount: data.vote_count || 0,
+        releaseDate: data.release_date || null,
+        runtime: data.runtime || null,
+        genres: data.genres || [],
+        originalLanguage: data.original_language || null,
+        tagline: data.tagline || null,
+        status: data.status || null,
+    };
+
+    cache.set(cacheKey, movie);
+
+    return movie;
+};
+
 module.exports = {
     getMovies,
     getGenres,
+    getMovieDetails,
 };
