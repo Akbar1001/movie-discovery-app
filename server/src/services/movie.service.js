@@ -1,5 +1,6 @@
 const tmdbRequest = require("./tmdb.client");
 const { normalizeMovie } = require("../utils/movie.utils");
+const cache = require("../utils/cache");
 
 const getMovies = async (filters = {}) => {
     const {
@@ -11,6 +12,26 @@ const getMovies = async (filters = {}) => {
         sort = "popularity.desc",
     } = filters;
 
+    const normalizedSearch = search?.trim().toLowerCase();
+
+    const cacheKey = JSON.stringify({
+        page,
+        search: normalizedSearch || null,
+        genre: genre || null,
+        year: year || null,
+        minRating: minRating ?? null,
+        sort,
+    });
+
+    const cachedResult = cache.get(cacheKey);
+
+    if (cachedResult) {
+        console.log("Cache hit:", cacheKey);
+        return cachedResult;
+    }
+
+    console.log("Cache miss:", cacheKey);
+
     const params = {
         language: "en-US",
         page,
@@ -19,11 +40,9 @@ const getMovies = async (filters = {}) => {
 
     let endpoint = "/discover/movie";
 
-    if (search) {
-    endpoint = "/search/movie";
-
-    params.query = search.trim().toLowerCase();
-
+    if (normalizedSearch) {
+        endpoint = "/search/movie";
+        params.query = normalizedSearch;
     } else {
         params.sort_by = sort;
 
@@ -42,7 +61,7 @@ const getMovies = async (filters = {}) => {
 
     const data = await tmdbRequest(endpoint, params);
 
-    return {
+    const result = {
         movies: data.results.map(normalizeMovie),
         pagination: {
             page: data.page,
@@ -50,12 +69,29 @@ const getMovies = async (filters = {}) => {
             totalResults: data.total_results,
         },
     };
+
+    cache.set(cacheKey, result);
+
+    return result;
 };
 
 const getGenres = async () => {
+    const cacheKey = "movie-genres";
+
+    const cachedGenres = cache.get(cacheKey);
+
+    if (cachedGenres) {
+        console.log("Cache hit:", cacheKey);
+        return cachedGenres;
+    }
+
+    console.log("Cache miss:", cacheKey);
+
     const data = await tmdbRequest("/genre/movie/list", {
         language: "en",
     });
+
+    cache.set(cacheKey, data.genres);
 
     return data.genres;
 };
