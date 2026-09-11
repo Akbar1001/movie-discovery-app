@@ -1,4 +1,3 @@
-
 import { Link, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 
@@ -15,7 +14,10 @@ const MovieDetails = () => {
         error,
     } = useQuery({
         queryKey: ["movie", id],
-        queryFn: () => getMovieDetails(id),
+
+        queryFn: ({ signal }) =>
+            getMovieDetails(id, signal),
+
         enabled: Boolean(id),
     });
 
@@ -87,7 +89,10 @@ const MovieDetails = () => {
 
     return (
         <main>
-            <Link to="/" className="back-link">
+            <Link
+                to="/"
+                className="back-link"
+            >
                 ← Back to movies
             </Link>
 
@@ -163,9 +168,12 @@ const MovieDetails = () => {
                         <button
                             type="button"
                             className="wishlist-button"
-                            onClick={handleWishlistClick}
+                            onClick={
+                                handleWishlistClick
+                            }
                             disabled={
-                                isAdding || isRemoving
+                                isAdding ||
+                                isRemoving
                             }
                         >
                             {wishlistButtonText}
@@ -213,4 +221,3 @@ const MovieDetails = () => {
 };
 
 export default MovieDetails;
-

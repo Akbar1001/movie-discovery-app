@@ -63,6 +63,7 @@ const getMovies = async (filters = {}) => {
 
     const result = {
         movies: data.results.map(normalizeMovie),
+
         pagination: {
             page: data.page,
             totalPages: data.total_pages,
@@ -87,15 +88,17 @@ const getGenres = async () => {
 
     console.log("Cache miss:", cacheKey);
 
-    const data = await tmdbRequest("/genre/movie/list", {
-        language: "en",
-    });
+    const data = await tmdbRequest(
+        "/genre/movie/list",
+        {
+            language: "en",
+        }
+    );
 
     cache.set(cacheKey, data.genres);
 
     return data.genres;
 };
-
 
 const getMovieDetails = async (movieId) => {
     const cacheKey = `movie-details:${movieId}`;
@@ -109,29 +112,19 @@ const getMovieDetails = async (movieId) => {
 
     console.log("Cache miss:", cacheKey);
 
-    const data = await tmdbRequest(`/movie/${movieId}`, {
-        language: "en-US",
-    });
+    const data = await tmdbRequest(
+        `/movie/${movieId}`,
+        {
+            language: "en-US",
+        }
+    );
 
-    const movie = {
-        id: data.id,
-        title: data.title || data.original_title || "Untitled",
-        overview: data.overview || "No description available.",
-        posterUrl: data.poster_path
-            ? `https://image.tmdb.org/t/p/w500${data.poster_path}`
-            : null,
-        backdropUrl: data.backdrop_path
-            ? `https://image.tmdb.org/t/p/w1280${data.backdrop_path}`
-            : null,
-        rating: data.vote_average || 0,
-        voteCount: data.vote_count || 0,
-        releaseDate: data.release_date || null,
-        runtime: data.runtime || null,
-        genres: data.genres || [],
-        originalLanguage: data.original_language || null,
-        tagline: data.tagline || null,
-        status: data.status || null,
-    };
+    const movie = normalizeMovie(data);
+
+    movie.runtime = data.runtime || null;
+    movie.genres = data.genres || [];
+    movie.tagline = data.tagline || null;
+    movie.status = data.status || null;
 
     cache.set(cacheKey, movie);
 

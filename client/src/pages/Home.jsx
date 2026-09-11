@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 
@@ -16,7 +15,7 @@ const Home = () => {
         sort: "popularity.desc",
     });
 
-     const {
+    const {
         data,
         isLoading,
         isError,
@@ -24,8 +23,12 @@ const Home = () => {
         isFetching,
     } = useMovies({
         page,
-        ...(filters.genre && { genre: filters.genre }),
-        ...(filters.year && { year: filters.year }),
+        ...(filters.genre && {
+            genre: filters.genre,
+        }),
+        ...(filters.year && {
+            year: filters.year,
+        }),
         ...(filters.minRating && {
             minRating: filters.minRating,
         }),
@@ -35,9 +38,10 @@ const Home = () => {
     const {
         data: genreData,
         isLoading: genresLoading,
+        isError: genresError,
     } = useQuery({
         queryKey: ["genres"],
-        queryFn: getGenres,
+        queryFn: ({ signal }) => getGenres(signal),
         staleTime: 60 * 60 * 1000,
     });
 
@@ -102,6 +106,7 @@ const Home = () => {
         return (
             <main>
                 <h1>Discover Movies</h1>
+
                 <p>
                     Failed to load movies:{" "}
                     {error?.response?.data?.message ||
@@ -131,11 +136,17 @@ const Home = () => {
                     value={filters.genre}
                     onChange={handleFilterChange}
                 >
-                    <option value="">All Genres</option>
+                    <option value="">
+                        All Genres
+                    </option>
 
                     {genresLoading ? (
                         <option disabled>
                             Loading genres...
+                        </option>
+                    ) : genresError ? (
+                        <option disabled>
+                            Failed to load genres
                         </option>
                     ) : (
                         genres.map((genre) => (
@@ -167,11 +178,26 @@ const Home = () => {
                     <option value="">
                         Any Rating
                     </option>
-                    <option value="5">5+ ⭐</option>
-                    <option value="6">6+ ⭐</option>
-                    <option value="7">7+ ⭐</option>
-                    <option value="8">8+ ⭐</option>
-                    <option value="9">9+ ⭐</option>
+
+                    <option value="5">
+                        5+ ⭐
+                    </option>
+
+                    <option value="6">
+                        6+ ⭐
+                    </option>
+
+                    <option value="7">
+                        7+ ⭐
+                    </option>
+
+                    <option value="8">
+                        8+ ⭐
+                    </option>
+
+                    <option value="9">
+                        9+ ⭐
+                    </option>
                 </select>
 
                 <select
@@ -221,7 +247,9 @@ const Home = () => {
             </section>
 
             {movies.length === 0 ? (
-                <p>No movies found for these filters.</p>
+                <p>
+                    No movies found for these filters.
+                </p>
             ) : (
                 <div className="movie-grid">
                     {movies.map((movie) => (
@@ -238,7 +266,8 @@ const Home = () => {
                     <button
                         onClick={handlePrevious}
                         disabled={
-                            page === 1 || isFetching
+                            page === 1 ||
+                            isFetching
                         }
                     >
                         Previous
@@ -266,4 +295,3 @@ const Home = () => {
 };
 
 export default Home;
-

@@ -1,4 +1,3 @@
-
 import apiClient from "./client";
 
 export const getMovies = async (
