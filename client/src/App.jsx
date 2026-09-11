@@ -6,6 +6,9 @@ import Home from "./pages/Home";
 import Search from "./pages/Search";
 import MovieDetails from "./pages/MovieDetails";
 import Wishlist from "./pages/Wishlist";
+import Credits from "./pages/Credits";
+
+
 
 function App() {
     return (
@@ -42,6 +45,13 @@ function App() {
                         />
                     }
                 />
+
+                <Route
+                    path="/credits"
+                    element={<Credits />}
+                />
+
+
             </Routes>
         </>
     );

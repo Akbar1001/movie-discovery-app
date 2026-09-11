@@ -733,3 +733,58 @@ h1 {
         width: 140px;
     }
 }
+
+
+/* =========================
+   Credits
+   ========================= */
+
+.credits-page {
+    max-width: 800px;
+}
+
+.credits-section {
+    padding: 30px;
+
+    border: 1px solid #2a2a2a;
+    border-radius: 10px;
+
+    background: #181818;
+}
+
+.credits-section h2 {
+    margin-top: 0;
+}
+
+.credits-section p {
+    line-height: 1.7;
+    color: #aaa;
+}
+
+.tmdb-link {
+    display: inline-block;
+    margin-top: 10px;
+
+    color: #fff;
+    font-weight: 600;
+}
+
+.tmdb-link:hover {
+    text-decoration: underline;
+}
+
+/* =========================
+   TMDB Attribution
+   ========================= */
+
+.tmdb-logo-link {
+    display: inline-block;
+    margin-bottom: 20px;
+}
+
+.tmdb-logo {
+    display: block;
+    width: 180px;
+    max-width: 100%;
+    height: auto;
+}
