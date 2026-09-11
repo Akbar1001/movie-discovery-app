@@ -788,3 +788,9 @@ h1 {
     max-width: 100%;
     height: auto;
 }
+
+.wishlist-error {
+    margin: 0 0 12px;
+    color: #ff8a8a;
+    font-size: 14px;
+}

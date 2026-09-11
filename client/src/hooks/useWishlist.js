@@ -1,4 +1,3 @@
-
 import {
     useMutation,
     useQuery,
@@ -48,7 +47,8 @@ const useWishlist = () => {
         },
     });
 
-    const wishlist = wishlistQuery.data?.data || [];
+    const wishlist =
+        wishlistQuery.data?.data || [];
 
     const isInWishlist = (movieId) => {
         return wishlist.some(
@@ -58,15 +58,20 @@ const useWishlist = () => {
 
     return {
         wishlist,
+
         isLoading: wishlistQuery.isLoading,
         isError: wishlistQuery.isError,
         error: wishlistQuery.error,
 
         addToWishlist: addMutation.mutate,
-        removeFromWishlist: removeMutation.mutate,
+        removeFromWishlist:
+            removeMutation.mutate,
 
         isAdding: addMutation.isPending,
         isRemoving: removeMutation.isPending,
+
+        addError: addMutation.error,
+        removeError: removeMutation.error,
 
         isInWishlist,
     };

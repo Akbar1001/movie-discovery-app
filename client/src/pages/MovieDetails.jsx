@@ -21,13 +21,15 @@ const MovieDetails = () => {
         enabled: Boolean(id),
     });
 
-    const {
-        isInWishlist,
-        addToWishlist,
-        removeFromWishlist,
-        isAdding,
-        isRemoving,
-    } = useWishlist();
+   const {
+    isInWishlist,
+    addToWishlist,
+    removeFromWishlist,
+    isAdding,
+    isRemoving,
+    addError,
+    removeError,
+} = useWishlist();
 
     if (isLoading) {
         return (
@@ -163,6 +165,14 @@ const MovieDetails = () => {
                                     )
                                 )}
                             </div>
+                        )}
+
+                        {(addError || removeError) && (
+                            <p className="wishlist-error">
+                            {addError?.response?.data?.message ||
+                            removeError?.response?.data?.message ||
+                            "Unable to update your wishlist. Please try again."}
+                            </p>
                         )}
 
                         <button
